@@ -11,7 +11,7 @@ from operator import itemgetter
 
 # maximum number of systematics to consider and to plot
 MAXSYST     = 300
-MAXSYSTPLOT = 20
+MAXSYSTPLOT = 23
 
 
 # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
@@ -109,7 +109,7 @@ def lookAtSystematics (datacardname) :
     # get the result with no systematics
     # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- 
     
-    filename = thepath + 'tempo.stats.' + str (0.) + '.txt'
+    filename = thepath + 'tempo.stats.' + str (0.) + nametag + '.txt'
     #f = open(filename, 'w')
     #for linea in header: f.write (linea + '\n')
     #f.close ()
@@ -154,7 +154,7 @@ def lookAtSystematics (datacardname) :
     h_removing = TH1F ('removing', 'removing', min(len (systematics),MAXSYSTPLOT), 0, min(len (systematics),MAXSYSTPLOT))
     h_removing.SetMarkerStyle (20)
     h_removing.SetMarkerColor (9)
-    h_removing.SetMarkerSize (2)
+    h_removing.SetMarkerSize (0.8)
     h_removing.GetYaxis().SetLabelFont(42)
     h_removing.GetXaxis().SetLabelFont(42)
     h_removing.GetXaxis().SetLabelSize(0.035)
@@ -162,7 +162,7 @@ def lookAtSystematics (datacardname) :
     h_adding = TH1F ('adding', 'adding', min(len (systematics),MAXSYSTPLOT), 0, min(len (systematics),MAXSYSTPLOT))
     h_adding.SetMarkerStyle (4)
     h_adding.SetMarkerColor (9)
-    h_adding.SetMarkerSize (2)
+    h_adding.SetMarkerSize (0.8)
     h_adding.GetYaxis().SetLabelFont(42)
     h_adding.GetXaxis().SetLabelFont(42)
     h_adding.GetXaxis().SetLabelSize(0.035)
@@ -180,12 +180,12 @@ def lookAtSystematics (datacardname) :
     h_sorted_adding = TH1F ('sorted_adding', 'sorted_adding', min(len (systematics),MAXSYSTPLOT), 0, min(len (systematics),MAXSYSTPLOT))
     h_sorted_adding.SetMarkerStyle (4)
     h_sorted_adding.SetMarkerColor (9)
-    h_sorted_adding.SetMarkerSize (2)
+    h_sorted_adding.SetMarkerSize (0.8)
  
     h_sorted_removing = TH1F ('sorted_removing', 'sorted_removing', min(len (systematics),MAXSYSTPLOT), 0, min(len (systematics),MAXSYSTPLOT))
     h_sorted_removing.SetMarkerStyle (20)
     h_sorted_removing.SetMarkerColor (9)
-    h_sorted_removing.SetMarkerSize (2)
+    h_sorted_removing.SetMarkerSize (0.8)
 
     #adding_dummy = sorted ([(k, v) for k, v in addingLimits.iteritems ()], key=itemgetter (1))
     adding_dummy = sorted ([(k, v) for k, v in addingLimits.iteritems ()], key=itemgetter (1), reverse=True)
