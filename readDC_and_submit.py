@@ -29,7 +29,7 @@ def runLimitCalc (filename) :
     f.write ("#/bash/sh \n")
     os.getcwd()
     f.write ("cd "+os.getcwd()+"\n")
-    f.write ("cd CMSSW_6_2_0_pre3/src/ \n")
+    f.write ("cd ../ \n")
     f.write ("eval `scramv1 runtime -sh` \n")
     f.write ("cd - \n")
     f.write ("cd /tmp/ \n")
@@ -133,7 +133,7 @@ def lookAtSystematics (datacardname) :
 # run the limit with no systematics
 # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- 
 
-    filename = thepath + 'tempo.stats.' + str (0.) + '.txt'
+    filename = thepath + 'tempo.stats.' + str (0.) + nametag +'.txt'
     f = open(filename, 'w')
     for linea in header: f.write (linea + '\n')
     f.close ()
