@@ -11,7 +11,7 @@ from operator import itemgetter
 
 # maximum number of systematics to consider and to plot
 MAXSYST     = 300
-MAXSYSTPLOT = 23
+MAXSYSTPLOT = 30
 
 
 # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
