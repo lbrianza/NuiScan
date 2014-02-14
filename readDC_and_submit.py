@@ -92,12 +92,15 @@ def lookAtSystematics (datacardname) :
     systime = 0
     header = []
     systematics = []
+    systematics_fixed = []
     for linea in lines:
         if '---' in linea : continue
         if systime == 0 :
             header.append (linea)
             if linea.split (' ')[0] == 'rate' :
                 systime = 1
+        elif 'Deco' in linea:
+            systematics_fixed.append(linea)
         else:
             systematics.append (linea)
 
@@ -126,6 +129,7 @@ def lookAtSystematics (datacardname) :
             if (it1 == it) : continue
             if len (systematics[it1].split ()) == 0 : continue
             f.write (systematics[it1] + '\n')
+        for linea in systematics_fixed : f.write (linea + '\n')
         f.close ()
 
         runLimitCalc (filename)
@@ -150,6 +154,7 @@ def lookAtSystematics (datacardname) :
         f = open(filename, 'w')
         for linea in header: f.write (linea + '\n')
         f.write (systematics[it] + '\n')
+        for linea in systematics_fixed : f.write (linea + '\n')        
         f.close ()
 
         runLimitCalc (filename)
