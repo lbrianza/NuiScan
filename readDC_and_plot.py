@@ -65,12 +65,16 @@ def lookAtSystematics (datacardname) :
     systime = 0
     header = []
     systematics = []
+    systematics_fixed = []
     for linea in lines:
         if '---' in linea : continue
         if systime == 0 :
             header.append (linea)
             if linea.split (' ')[0] == 'rate' :
                 systime = 1
+        elif 'Deco' in linea:
+            systematics_fixed.append(linea)
+                        
         else:
             systematics.append (linea)
 
@@ -151,38 +155,38 @@ def lookAtSystematics (datacardname) :
     gStyle.SetStatY         (0.91)
     gStyle . cd()
 
-    h_removing = TH1F ('removing', 'removing', min(len (systematics),MAXSYSTPLOT), 0, min(len (systematics),MAXSYSTPLOT))
+    h_removing = TH1F ('removing', 'removing', min(len (systematics)+1,MAXSYSTPLOT+1), 0, min(len (systematics)+1,MAXSYSTPLOT+1))
     h_removing.SetMarkerStyle (20)
     h_removing.SetMarkerColor (9)
     h_removing.SetMarkerSize (0.8)
     h_removing.GetYaxis().SetLabelFont(42)
     h_removing.GetXaxis().SetLabelFont(42)
-    h_removing.GetXaxis().SetLabelSize(0.035)
+    h_removing.GetXaxis().SetLabelSize(0.045)
 
-    h_adding = TH1F ('adding', 'adding', min(len (systematics),MAXSYSTPLOT), 0, min(len (systematics),MAXSYSTPLOT))
+    h_adding = TH1F ('adding', 'adding', min(len (systematics)+1,MAXSYSTPLOT+1), 0, min(len (systematics)+1,MAXSYSTPLOT+1))
     h_adding.SetMarkerStyle (4)
     h_adding.SetMarkerColor (9)
     h_adding.SetMarkerSize (0.8)
     h_adding.GetYaxis().SetLabelFont(42)
     h_adding.GetXaxis().SetLabelFont(42)
-    h_adding.GetXaxis().SetLabelSize(0.035)
+    h_adding.GetXaxis().SetLabelSize(0.045)
 
     binId = 1
     for syst in syslist:
-        if binId <= min(len (systematics),MAXSYSTPLOT) :
+        if binId <= min(len (systematics),MAXSYSTPLOT+1) :
            h_removing.GetXaxis ().SetBinLabel (binId, syst)
            h_removing.SetBinContent (binId, float (removingLimits[syst]))
            h_adding.GetXaxis ().SetBinLabel (binId, syst)
            h_adding.SetBinContent (binId, float (addingLimits[syst]))
-           #print "binId = "+str(binId)
+#           print "binId = "+str(binId)
         binId += 1 
 
-    h_sorted_adding = TH1F ('sorted_adding', 'sorted_adding', min(len (systematics),MAXSYSTPLOT), 0, min(len (systematics),MAXSYSTPLOT))
+    h_sorted_adding = TH1F ('sorted_adding', 'sorted_adding', min(len (systematics)+1,MAXSYSTPLOT+1), 0, min(len (systematics)+1,MAXSYSTPLOT+1))
     h_sorted_adding.SetMarkerStyle (4)
     h_sorted_adding.SetMarkerColor (9)
     h_sorted_adding.SetMarkerSize (0.8)
  
-    h_sorted_removing = TH1F ('sorted_removing', 'sorted_removing', min(len (systematics),MAXSYSTPLOT), 0, min(len (systematics),MAXSYSTPLOT))
+    h_sorted_removing = TH1F ('sorted_removing', 'sorted_removing', min(len (systematics)+1,MAXSYSTPLOT+1), 0, min(len (systematics)+1,MAXSYSTPLOT+1))
     h_sorted_removing.SetMarkerStyle (20)
     h_sorted_removing.SetMarkerColor (9)
     h_sorted_removing.SetMarkerSize (0.8)
@@ -193,7 +197,7 @@ def lookAtSystematics (datacardname) :
 
     binId = 1
     for syst in sorted_syslist:
-        if binId <= min(len (systematics),MAXSYSTPLOT) :
+        if binId <= min(len (systematics),MAXSYSTPLOT+1) :
            h_sorted_removing.GetXaxis ().SetBinLabel (binId, syst)
            h_sorted_removing.SetBinContent (binId, float (removingLimits[syst]))        
            h_sorted_adding.GetXaxis ().SetBinLabel (binId, syst)
@@ -203,25 +207,25 @@ def lookAtSystematics (datacardname) :
     # final plotting and saving
     # ---- ---- ---- ---- ---- ---- ---- ----
 
-    can = TCanvas ('can', 'can', 20 * min(len (systematics),MAXSYSTPLOT), 400)
-    frac = float (600) / 20. * float (min(len (systematics),MAXSYSTPLOT))
+    can = TCanvas ('can', 'can', 20 * min(len (systematics),MAXSYSTPLOT+1), 400)
+    frac = float (600) / 20. * float (min(len (systematics),MAXSYSTPLOT+1))
     can.SetMargin (0.1 * float (frac), 0.025 * float (frac), 0.5, 0.1) #LRBT
     can.SetGridx ()
 
-    l_nominal = TLine (0.,  float (nominalLimit), float (min(len (systematics),MAXSYSTPLOT)), float (nominalLimit))
+    l_nominal = TLine (0.,  float (nominalLimit), float (min(len (systematics),MAXSYSTPLOT+1)), float (nominalLimit))
     l_nominal.SetLineColor (2)
 #    l_nominal.SetLineWidth (float (1))
-    l_stats = TLine (0.,  float (statsLimit), float (min(len (systematics),MAXSYSTPLOT)), float (statsLimit))
+    l_stats = TLine (0.,  float (statsLimit), float (min(len (systematics),MAXSYSTPLOT+1)), float (statsLimit))
     l_stats.SetLineColor (2)
 #    l_stats.SetLineWidth (float (1))
     
-    bkg = can.DrawFrame (0, h_adding.GetBinContent (1) * 0.9, min(len (systematics),MAXSYSTPLOT), h_removing.GetBinContent (1) * 1.1)
-    bkg.GetXaxis ().Set (min(len (systematics),MAXSYSTPLOT), 0, min(len (systematics),MAXSYSTPLOT))
-    for i in range (0, min(len (systematics),MAXSYSTPLOT)) :
+    bkg = can.DrawFrame (0, h_adding.GetBinContent (1) * 0.9, min(len (systematics),MAXSYSTPLOT+1), h_removing.GetBinContent (1) * 1.1)
+    bkg.GetXaxis ().Set (min(len (systematics),MAXSYSTPLOT+1), 0, min(len (systematics),MAXSYSTPLOT+1))
+    for i in range (0, min(len (systematics),MAXSYSTPLOT+1)) :
         bkg.GetXaxis ().SetBinLabel (i+1, syslist[i])
     bkg.GetYaxis().SetLabelFont(42);
     bkg.GetXaxis().SetLabelFont(42);
-    bkg.GetXaxis().SetLabelSize(0.035);
+    bkg.GetXaxis().SetLabelSize(0.05);
     bkg.GetXaxis().LabelsOption ("v")
 
     bkg.SetTitle (nametag)
@@ -232,23 +236,27 @@ def lookAtSystematics (datacardname) :
 
     h_adding.GetYaxis().SetLabelFont(42)
     h_adding.GetXaxis().SetLabelFont(42)
-    h_adding.GetXaxis().SetLabelSize(0.035)
+    h_adding.GetXaxis().SetLabelSize(0.045)
     h_adding.GetXaxis().LabelsOption ("v")
+
 
     h_removing.GetYaxis().SetLabelFont(42)
     h_removing.GetXaxis().SetLabelFont(42)
-    h_removing.GetXaxis().SetLabelSize(0.035)
+    h_removing.GetXaxis().SetLabelSize(0.045)
     h_removing.GetXaxis().LabelsOption ("v")
+
 
     h_sorted_adding.GetYaxis().SetLabelFont(42)
     h_sorted_adding.GetXaxis().SetLabelFont(42)
-    h_sorted_adding.GetXaxis().SetLabelSize(0.035)
+    h_sorted_adding.GetXaxis().SetLabelSize(0.045)
     h_sorted_adding.GetXaxis().LabelsOption ("v")
+
 
     h_sorted_removing.GetYaxis().SetLabelFont(42)
     h_sorted_removing.GetXaxis().SetLabelFont(42)
-    h_sorted_removing.GetXaxis().SetLabelSize(0.035)
+    h_sorted_removing.GetXaxis().SetLabelSize(0.045)
     h_sorted_removing.GetXaxis().LabelsOption ("v")
+
 
     can.SetGrid()
     #h_adding.Draw ('P')
@@ -262,7 +270,7 @@ def lookAtSystematics (datacardname) :
     can.SaveAs ('result.' + nametag + '.png')
 
     bkg_sorted = bkg.Clone ('bkg_sorted')
-    for i in range (0, min(len (systematics),MAXSYSTPLOT)) :
+    for i in range (0, min(len (systematics),MAXSYSTPLOT+1)) :
         bkg_sorted.GetXaxis ().SetBinLabel (i+1, sorted_syslist[i])
     bkg_sorted.GetYaxis().SetLabelFont(42);
     bkg_sorted.GetXaxis().SetLabelFont(42);
