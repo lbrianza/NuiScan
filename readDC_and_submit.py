@@ -143,6 +143,17 @@ def lookAtSystematics (datacardname) :
     f.close ()
     runLimitCalc (filename)
 
+# run the limit with only shape systematics
+# ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- 
+
+    filename = thepath + 'tempo.shape.' + str (0.) + nametag +'.txt'
+    f = open(filename, 'w')
+    for linea in header: f.write (linea + '\n')
+    for linea in systematics_fixed : f.write (linea + '\n')
+    f.close ()
+    runLimitCalc (filename)
+    
+
 # add, one at a time, only one systematic source, and run the limit
 # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- 
 
