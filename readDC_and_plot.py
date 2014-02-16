@@ -92,6 +92,7 @@ def lookAtSystematics (datacardname) :
     removingLimits['NOMINAL'] = nominalLimit
     syslist = []
     syslist.append ('NOMINAL')
+    syslist.append ('SHAPE SYST')
     
     for it in range (min(len (systematics),MAXSYST)) :
         elements = systematics[it].split ()
@@ -121,6 +122,21 @@ def lookAtSystematics (datacardname) :
 
     addingLimits = {}
     addingLimits['NOMINAL'] = statsLimit
+
+
+    # get the result with only shape systematics
+    # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- 
+    
+    filename2 = thepath + 'tempo.shape.' + str (0.) + nametag + '.txt'
+    #f = open(filename, 'w')
+    #for linea in header: f.write (linea + '\n')
+    #f.close ()
+    shapeLimit = getLimitFromFile (filename2)
+
+#    addingLimits = {}
+    addingLimits['SHAPE SYST'] = shapeLimit
+
+    
 
     # add, one at a time, only one systematic source
     # ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- 
@@ -174,8 +190,9 @@ def lookAtSystematics (datacardname) :
     binId = 1
     for syst in syslist:
         if binId <= min(len (systematics),MAXSYSTPLOT+1) :
-           h_removing.GetXaxis ().SetBinLabel (binId, syst)
-           h_removing.SetBinContent (binId, float (removingLimits[syst]))
+           if syst != "SHAPE SYST":
+               h_removing.GetXaxis ().SetBinLabel (binId, syst)
+               h_removing.SetBinContent (binId, float (removingLimits[syst]))
            h_adding.GetXaxis ().SetBinLabel (binId, syst)
            h_adding.SetBinContent (binId, float (addingLimits[syst]))
 #           print "binId = "+str(binId)
@@ -198,8 +215,9 @@ def lookAtSystematics (datacardname) :
     binId = 1
     for syst in sorted_syslist:
         if binId <= min(len (systematics),MAXSYSTPLOT+1) :
-           h_sorted_removing.GetXaxis ().SetBinLabel (binId, syst)
-           h_sorted_removing.SetBinContent (binId, float (removingLimits[syst]))        
+           if syst != "SHAPE SYST":
+               h_sorted_removing.GetXaxis ().SetBinLabel (binId, syst)
+               h_sorted_removing.SetBinContent (binId, float (removingLimits[syst]))        
            h_sorted_adding.GetXaxis ().SetBinLabel (binId, syst)
            h_sorted_adding.SetBinContent (binId, float (addingLimits[syst]))        
         binId += 1 
@@ -213,11 +231,13 @@ def lookAtSystematics (datacardname) :
     can.SetGridx ()
 
     l_nominal = TLine (0.,  float (nominalLimit), float (min(len (systematics),MAXSYSTPLOT+1)), float (nominalLimit))
-    l_nominal.SetLineColor (2)
+    l_nominal.SetLineColor (1)
 #    l_nominal.SetLineWidth (float (1))
     l_stats = TLine (0.,  float (statsLimit), float (min(len (systematics),MAXSYSTPLOT+1)), float (statsLimit))
     l_stats.SetLineColor (2)
 #    l_stats.SetLineWidth (float (1))
+    l_shape = TLine (0.,  float (shapeLimit), float (min(len (systematics),MAXSYSTPLOT+1)), float (shapeLimit))
+    l_shape.SetLineColor (4)
     
     bkg = can.DrawFrame (0, h_adding.GetBinContent (1) * 0.9, min(len (systematics),MAXSYSTPLOT+1), h_removing.GetBinContent (1) * 1.1)
     bkg.GetXaxis ().Set (min(len (systematics),MAXSYSTPLOT+1), 0, min(len (systematics),MAXSYSTPLOT+1))
@@ -262,6 +282,7 @@ def lookAtSystematics (datacardname) :
     #h_adding.Draw ('P')
     l_nominal.Draw ('same')
     l_stats.Draw ('same')
+    l_shape.Draw ('same')    
     h_adding.Draw ('Psame')
     h_removing.Draw ('Psame')    
     #can.Print ('result.' + nametag + '.pdf', 'pdf')
@@ -280,6 +301,7 @@ def lookAtSystematics (datacardname) :
     #h_sorted_adding.Draw ('P')
     l_nominal.Draw ('same')
     l_stats.Draw ('same')
+    l_shape.Draw ('same')
     h_sorted_adding.Draw ('Psame')
     h_sorted_removing.Draw ('Psame')
     #can.Print ('result.sorted.' + nametag + '.pdf', 'pdf')
