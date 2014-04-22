@@ -101,6 +101,8 @@ def lookAtSystematics (datacardname) :
                 systime = 1
         elif 'Deco' in linea:
             systematics_fixed.append(linea)
+        elif 'CMS_sig' in linea:
+            systematics_fixed.append(linea)
         else:
             systematics.append (linea)
 
@@ -187,7 +189,7 @@ if __name__ == '__main__':
         print 'input datacard folder missing\n'
         exit (1)
 
-    folderName = sys.argv[1].split ('/')[-1] + '_copy'
+    folderName = sys.argv[1].split ('/')[-1] + '_copy_01jet'
     result = getstatusoutput ('rm -rf ' + folderName)
     if result[0] == 0 : print 'NB folder ' + folderName + ' cleaned, being replaced'
 
