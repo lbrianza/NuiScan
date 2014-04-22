@@ -74,7 +74,8 @@ def lookAtSystematics (datacardname) :
                 systime = 1
         elif 'Deco' in linea:
             systematics_fixed.append(linea)
-                        
+        elif 'CMS_sig' in linea:
+            systematics_fixed.append(linea)
         else:
             systematics.append (linea)
 
@@ -241,7 +242,8 @@ def lookAtSystematics (datacardname) :
     l_shape = TLine (0.,  float (shapeLimit), float (min(len (systematics),MAXSYSTPLOT+1)), float (shapeLimit))
     l_shape.SetLineColor (4)
     
-    bkg = can.DrawFrame (0, float(statsLimit) * 0.9, min(len (systematics),MAXSYSTPLOT+1), float(nominalLimit) * 1.1)
+#    bkg = can.DrawFrame (0, float(statsLimit) * 0.9, min(len (systematics),MAXSYSTPLOT+1), float(nominalLimit) * 1.1)
+    bkg = can.DrawFrame (0, 0, min(len (systematics),MAXSYSTPLOT+1), 7)
     bkg.GetXaxis ().Set (min(len (systematics),MAXSYSTPLOT+1), 0, min(len (systematics),MAXSYSTPLOT+1))
     for i in range (0, min(len (systematics),MAXSYSTPLOT+1)) :
         bkg.GetXaxis ().SetBinLabel (i+1, syslist[i])
@@ -334,7 +336,7 @@ if __name__ == '__main__':
         print 'input datacard folder missing\n'
         exit (1)
         
-    folderName = sys.argv[1].split ('/')[-1] + '_copy_TIGHT'
+    folderName = sys.argv[1].split ('/')[-1] + '_copy_01jet'
     #result = getstatusoutput ('rm -rf ' + folderName)
     #if result[0] == 0 : print 'NB folder ' + folderName + ' cleaned, being replaced'
 
